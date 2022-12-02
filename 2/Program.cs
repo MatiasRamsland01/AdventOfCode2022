@@ -1,5 +1,5 @@
 ﻿string[] lines = System.IO.File.ReadAllLines(@"input.txt");
-var possibilities = new Dictionary<string, int>()
+var possibilities = new Dictionary<string, int>() // Score mapping dictionary
 {
     {"AX", 4},
     {"BY", 5},
@@ -10,9 +10,8 @@ var possibilities = new Dictionary<string, int>()
     {"BX", 1},
     {"CX", 7},
     {"CY", 2},
-
 };
-var mappingDict = new Dictionary<string, string>()
+var mappingDict = new Dictionary<string, string>() //Dictionary to map different outcomes given a condition of rock, paper, scissor
 {
     {"AX", "AZ"},
     {"BY", "BY"},
@@ -23,7 +22,6 @@ var mappingDict = new Dictionary<string, string>()
     {"BX", "BX"},
     {"CX", "CY"},
     {"CY", "CZ"},
-
 };
 var score = 0;
 var scoreCondition = 0;
