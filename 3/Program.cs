@@ -1,4 +1,7 @@
 ﻿using System.Text;
+using System.Diagnostics;
+var watch = new Stopwatch();
+watch.Start();
 string[] lines = System.IO.File.ReadAllLines(@"input.txt");
 var currentPrioritySum = 0;
 foreach (string line in lines)
@@ -25,8 +28,11 @@ foreach (string line in lines)
 }
 Console.BackgroundColor = ConsoleColor.Blue;
 Console.WriteLine($"currentPrioritySum: {currentPrioritySum}");
+watch.Stop();
+Console.WriteLine($"Time elapsed: {watch.ElapsedMilliseconds} ms");
 
 // ----- Part two ----- //
+watch.Restart();
 var tempdata = new Dictionary<string, int>();
 var j = 0;
 var currentPrioritySumBadges = 0;
@@ -66,4 +72,6 @@ foreach (string line in lines)
         }
     }
 }
-Console.WriteLine(currentPrioritySumBadges);
+Console.WriteLine($"currentPrioritySumBadges: {currentPrioritySumBadges}");
+watch.Stop();
+Console.WriteLine($"Time elapsed: {watch.ElapsedMilliseconds} ms");
