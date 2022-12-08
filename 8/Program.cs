@@ -1,4 +1,7 @@
-﻿string[] lines = System.IO.File.ReadAllLines(@"input.txt");
+﻿using System.Diagnostics;
+/* var watch = new Stopwatch();
+watch.Start();
+string[] lines = System.IO.File.ReadAllLines(@"input.txt");
 var treesVisible = 0; //Amount of trees that are visible
 for (var i = 0; i < lines.Length; i++)
 {
@@ -43,7 +46,7 @@ for (var i = 0; i < lines.Length; i++)
 
         // Check if the tree is visible from the bottom by recursively checking the the next bottom element
         var visibleBottom = false;
-        if (tree > bottom)
+        if (tree > bottom && visibleTop == false)//To avoid unnecessary computation i check if already computed sides are visible
         {
             visibleBottom = true;
             var pointer = i + 1;
@@ -61,7 +64,7 @@ for (var i = 0; i < lines.Length; i++)
 
         // Check if the tree is visible from the Left by recursively checking the the next left element
         var visibleLeft = false;
-        if (tree > left)
+        if (tree > left && visibleBottom == false && visibleTop == false) //To avoid unnecessary computation i check if already computed sides are visible
         {
             visibleLeft = true;
             var pointer = j - 1;
@@ -79,7 +82,7 @@ for (var i = 0; i < lines.Length; i++)
 
         // Check if the tree is visible from the right by recursively checking the the next right element
         bool visibleRight = false;
-        if (tree > right)
+        if (tree > right && visibleLeft == false && visibleBottom == false && visibleTop == false) //To avoid unnecessary computation i check if already computed sides are visible
         {
             visibleRight = true;
             var pointer = j + 1;
@@ -105,8 +108,12 @@ for (var i = 0; i < lines.Length; i++)
 
 }
 Console.WriteLine(treesVisible);
-/* 
+watch.Stop();
+Console.WriteLine($"Time elapsed: {watch.ElapsedMilliseconds} ms");  */
+
 //-----Part 2-----//
+var watch = new Stopwatch();
+watch.Start();
 string[] lines = System.IO.File.ReadAllLines(@"input.txt");
 var treesScore = new List<int>();
 for (var i = 0; i < lines.Length; i++)
@@ -116,14 +123,14 @@ for (var i = 0; i < lines.Length; i++)
         // Find the edges of the map
         var tree = Int32.Parse(lines[i][j].ToString());
 
-        //Init the values and check if an exception is thrown, and finds out where it is an edge
-        int left;int right;int top;int bottom;
-        try{left = Int32.Parse(lines[i][j - 1].ToString());}catch{left = -1;}
-        try{right = Int32.Parse(lines[i][j + 1].ToString());}catch{right = -1;}
-        try{top = Int32.Parse(lines[i - 1][j].ToString());}catch{top = -1;}
-        try{bottom = Int32.Parse(lines[i + 1][j].ToString());}catch{bottom = -1;}
+        //Init the values and check if an exception is thrown, and finds out where it is an edge. Sets the value to -1 if one side is undefined
+        int left; int right; int top; int bottom;
+        try { left = Int32.Parse(lines[i][j - 1].ToString()); } catch { left = -1; }
+        try { right = Int32.Parse(lines[i][j + 1].ToString()); } catch { right = -1; }
+        try { top = Int32.Parse(lines[i - 1][j].ToString()); } catch { top = -1; }
+        try { bottom = Int32.Parse(lines[i + 1][j].ToString()); } catch { bottom = -1; }
 
-        //Quick check if the tree is not visible. This is to avoid further computation if it is not nescessary
+        //Quick check if the tree is not visible. This is to avoid further unnecessary computation
         if (tree <= left && tree <= right && tree <= top && tree <= bottom)
         {
             treesScore.Add(1);
@@ -203,7 +210,8 @@ for (var i = 0; i < lines.Length; i++)
     }
 }
 Console.WriteLine($"Max score: {treesScore.Max()}");
- */
+watch.Stop();
+Console.WriteLine($"Time elapsed: {watch.ElapsedMilliseconds}ms");
 
 
 
