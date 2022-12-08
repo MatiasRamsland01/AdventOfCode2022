@@ -1,4 +1,4 @@
-public class Directory
+public class Directory : IDirectory
 {
     public Directory(string name)
     {
@@ -26,4 +26,5 @@ public class Directory
     {
         Directories.Add(directory);
     }
+
 }
