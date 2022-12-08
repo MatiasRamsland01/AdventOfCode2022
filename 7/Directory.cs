@@ -11,7 +11,7 @@ public class Directory : IDirectory
     public int Sum()
     {
         var sum = Files.Sum();
-        //This is supposed to go recursively through all children directories and sum their files
+        //This is supposed to go recursively through all children directories and sum their files. But it doesn't work. I don't know why.
         foreach (var directory in Directories)
         {
             sum += directory.Sum();
