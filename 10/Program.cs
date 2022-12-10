@@ -1,4 +1,4 @@
-﻿/* string[] lines = System.IO.File.ReadAllLines("input.txt");
+﻿string[] lines = System.IO.File.ReadAllLines("input.txt");
 var x = 1;
 var cycle = 0;
 var signalIntervals = new List<int> { 220, 180, 140, 100, 60, 20 };
@@ -14,12 +14,6 @@ foreach (var line in lines)
             signalIntervals.Remove(interval);
         }
     });
-
-
-
-
-
-
     var splittetLine = line.Split(' ');
     var command = splittetLine[0];
     if (command == "noop") { continue; }
@@ -36,16 +30,12 @@ foreach (var line in lines)
             }
         });
         x += Int32.Parse(splittetLine[1]);
-        Console.WriteLine($"Cycle: {cycle} - X: {x} - Command: {command} - Value: {splittetLine[1]}");
 
     }
 }
-Console.WriteLine(cycle);
-foreach (var signal in signalStrength)
-{
-    Console.WriteLine(signal);
-}
-Console.WriteLine($"Sum: {signalStrength.Sum()}"); */
+Console.WriteLine($"Sum: {signalStrength.Sum()}");
+/* 
+// ----- Part 2 -----
 string[] lines = System.IO.File.ReadAllLines("input.txt");
 var signalIntervals = new List<int> { 220, 180, 140, 100, 60, 20 };
 var sprite = new List<List<string>>();
@@ -56,31 +46,32 @@ for (var i = 0; i < signalIntervals.Count(); i++)
 var x = 1;
 var cycle = 0;
 var pointer = 0;
-//If cycle number equal x then add # to sprite.
 foreach (var line in lines)
 {
-    if (cycle % 40 == 0 && cycle != 0)
+    if (cycle % 40 == 0 && cycle != 0) //Move to next line
     {
         pointer++;
         cycle = 0;
 
     }
 
+    // Check if pixel is visible
     if (PixelVisible(cycle, x))
         sprite[pointer].Add("#");
     else
     {
         sprite[pointer].Add(".");
     }
+
     cycle++;
-    Console.WriteLine($"Cycle: {cycle} - X: {x}, Pointer: {pointer}");
     var splittetLine = line.Split(' ');
     var command = splittetLine[0];
     if (command == "noop") { continue; }
     for (var i = 0; i < 2; i++)
     {
         if (i == 0) { continue; }
-        if (cycle % 40 == 0)
+
+        if (cycle % 40 == 0) //Move to next line
         {
             pointer++;
             cycle = 0;
@@ -114,3 +105,4 @@ static bool PixelVisible(int crt, int sprite)
     else
         return false;
 }
+ */
