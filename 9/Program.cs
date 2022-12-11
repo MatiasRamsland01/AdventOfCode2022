@@ -1,5 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-/* string[] lines = System.IO.File.ReadAllLines("input.txt");
+﻿string[] lines = System.IO.File.ReadAllLines("input.txt");
 List<List<string>> playground = new List<List<string>>();
 (int x, int y) headPosition = (x: 0, y: 0);
 (int x, int y) tailPosition = (x: 0, y: 0);
@@ -13,7 +12,6 @@ foreach (var line in lines)
     var parts = line.Split(" ");
     if (parts[0] == "R")
     {
-
         for (var i = 0; i < Int32.Parse(parts[1]); i++)
         {
             headPosition.y++;
@@ -108,7 +106,7 @@ foreach (var line in lines)
     }
 
 }
-Console.WriteLine(timesMoved); */
+Console.WriteLine(timesMoved);
 
 static bool NeedToMove((int x, int y) headposition, (int x, int y) tailposition)
 {
@@ -188,8 +186,8 @@ static bool Adjacent((int x, int y) headposition, (int x, int y) tailposition)
     return false;
 
 }
-
-string[] lines = System.IO.File.ReadAllLines("input.txt");
+//----- Part 2 -----//
+/* string[] lines = System.IO.File.ReadAllLines("input.txt");
 List<List<string>> playground = new List<List<string>>();
 var previous = new List<int>();
 (int x, int y)[] items = new (int x, int y)[10];
@@ -220,64 +218,42 @@ foreach (var line in lines)
                     Console.WriteLine();
                     items[j + 1] = items[j];
                     items[j + 1].y--;
-                    if (j == 8)
-                    {
-                        if (position.ContainsKey(items[j + 1]))
-                        {
-
-                            position[items[j + 1]]++;
-                        }
-                        else
-                        {
-                            timesMoved++;
-                            position.Add(items[j + 1], 1);
-                        }
-                    }
-
                 }
-
             }
-
         }
-
     }
     else if (parts[0] == "U")
     {
         for (var i = 0; i < Int32.Parse(parts[1]); i++)
         {
             items[0].x--;
-            for (var j = 0; j < items.Count(); j++)
+            for (var j = 0; j < 1; j++)
             {
                 if (j == 9) { continue; }
                 if (NeedToMove(items[j], items[j + 1]))
                 {
-
-                    if (j == 8)
-                    {
-                        if (position.ContainsKey(items[j + 1]))
-                        {
-
-                            position[items[j + 1]]++;
-                        }
-                        else
-                        {
-                            timesMoved++;
-                            position.Add(items[j + 1], 1);
-                        }
-                    }
-                    Console.WriteLine($"Position: head: {items[j]} ,tail:{items[j + 1]}");
-
+                    items[j + 1] = items[j];
+                    items[j + 1].x++;
                 }
-
             }
-
         }
-
-
     }
 }
 foreach (var item in items)
 {
     Console.WriteLine(item);
 }
-Console.WriteLine(timesMoved);
+Console.WriteLine(timesMoved); */
+/* if (j == 8)
+                   {
+                       if (position.ContainsKey(items[j + 1]))
+                       {
+
+                           position[items[j + 1]]++;
+                       }
+                       else
+                       {
+                           timesMoved++;
+                           position.Add(items[j + 1], 1);
+                       }
+                   } */
