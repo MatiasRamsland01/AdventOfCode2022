@@ -1,259 +1,60 @@
-﻿string[] lines = System.IO.File.ReadAllLines("input.txt");
-List<List<string>> playground = new List<List<string>>();
-(int x, int y) headPosition = (x: 0, y: 0);
-(int x, int y) tailPosition = (x: 0, y: 0);
-var position = new Dictionary<(int, int), int>();
-position.Add((0, 0), 1);
-
-
-var timesMoved = 1;
+﻿var visitedLocations = new HashSet<(int x, int y)>() { (0, 0) }; //Using a hashset to avoid duplicates
+/* var head = (x: 0, y: 0); // Part 1
+var tail = (x: 0, y: 0); // Part 1 */
+var ropeSize = 10; // Part 2
+var rope = new (int x, int y)[ropeSize]; // Part 2
+for (var i = 0; i < ropeSize; i++) // Part 2
+{
+    rope[i] = (0, 0); // Part 2
+}
+var lines = File.ReadAllLines("input.txt");
 foreach (var line in lines)
 {
-    var parts = line.Split(" ");
-    if (parts[0] == "R")
+    var splittetLine = line.Split(" ");
+    var x = splittetLine[0];
+    var y = Int32.Parse(splittetLine[1]);
+    for (var i = 0; i < y; i++)
     {
-        for (var i = 0; i < Int32.Parse(parts[1]); i++)
+        var dx = x == "R" ? 1 : x == "L" ? -1 : 0;
+        var dy = x == "U" ? 1 : x == "D" ? -1 : 0;
+        /* head.x += dx; // Part 1
+        head.y += dy; */ // Part 1
+        rope[0].Item1 += dx; // Part 2
+        rope[0].Item2 += dy; // Part 2
+        for (var j = 0; j < ropeSize - 1; j++) // Part 2
         {
-            headPosition.y++;
-            if (NeedToMove(headPosition, tailPosition))
-            {
-                tailPosition = headPosition;
-                tailPosition.y--;
-                if (position.ContainsKey(tailPosition))
-                {
+            var head = rope[j];
+            var tail = rope[j + 1];
 
-                    position[tailPosition]++;
-                }
-                else
+            var deltaX = head.x - tail.x;
+            var deltaY = head.y - tail.y;
+            if (Math.Abs(deltaX) > 1 || Math.Abs(deltaY) > 1) //Check if we need to move the tail
+            {
+                if (deltaX == 0) // Since there are no change i x direction we only need to move in the y direction
                 {
-                    timesMoved++;
-                    position.Add(tailPosition, 1);
+                    int yStep = Decimal.ToInt32(Math.Floor((decimal)deltaY / 2));
+                    tail.y += yStep;
+                }
+                else if (deltaY == 0) //  Since there are no change i y direction we only need to move in the x direction
+                {
+                    int xStep = Decimal.ToInt32(Math.Floor((decimal)deltaX / 2));
+                    tail.x += xStep;
+                }
+                else //Change in both x and y direction
+                {
+                    tail.x += deltaX > 0 ? 1 : -1;
+                    tail.y += deltaY > 0 ? 1 : -1;
                 }
             }
-        }
-
-    }
-    else if (parts[0] == "U")
-    {
-        for (var i = 0; i < Int32.Parse(parts[1]); i++)
-        {
-            headPosition.x--;
-            if (NeedToMove(headPosition, tailPosition))
+            rope[j + 1] = tail; // Part 2
+            if (j == ropeSize - 2) // Part 2
             {
-                tailPosition = headPosition;
-                tailPosition.x++;
-                if (position.ContainsKey(tailPosition))
-                {
-
-                    position[tailPosition]++;
-                }
-                else
-                {
-                    timesMoved++;
-                    position.Add(tailPosition, 1);
-                }
+                visitedLocations.Add(tail);
             }
         }
-
-    }
-    else if (parts[0] == "L")
-    {
-        for (var i = 0; i < Int32.Parse(parts[1]); i++)
-        {
-            headPosition.y--;
-            if (NeedToMove(headPosition, tailPosition))
-            {
-                tailPosition = headPosition;
-                tailPosition.y++;
-                if (position.ContainsKey(tailPosition))
-                {
-
-                    position[tailPosition]++;
-                }
-                else
-                {
-                    timesMoved++;
-                    position.Add(tailPosition, 1);
-                }
-            }
-        }
+        //visitedLocations.Add(tail); // Part 1
 
 
-    }
-    else if (parts[0] == "D")
-    {
-        for (var i = 0; i < Int32.Parse(parts[1]); i++)
-        {
-            headPosition.x++;
-            if (NeedToMove(headPosition, tailPosition))
-            {
-                tailPosition = headPosition;
-                tailPosition.x--;
-                if (position.ContainsKey(tailPosition))
-                {
-
-                    position[tailPosition]++;
-                }
-                else
-                {
-                    timesMoved++;
-                    position.Add(tailPosition, 1);
-                }
-            }
-        }
-
-
-    }
-
-}
-Console.WriteLine(timesMoved);
-
-static bool NeedToMove((int x, int y) headposition, (int x, int y) tailposition)
-{
-    if (Overlapping(headposition, tailposition))
-    {
-        return false;
-    }
-    if (Beside(headposition, tailposition))
-    {
-        return false;
-    }
-    if (Adjacent(headposition, tailposition))
-    {
-        return false;
-    }
-    return true;
-}
-
-static bool Overlapping((int x, int y) headposition, (int x, int y) tailposition)
-{
-    if (headposition == tailposition)
-    {
-        return true;
-    }
-    return false;
-
-}
-
-static bool Beside((int x, int y) headposition, (int x, int y) tailposition)
-{
-    //Checks if head is under tail
-    if (headposition == (tailposition.x + 1, tailposition.y))
-    {
-        return true;
-    }
-    //Checks if head is above tail
-    if (headposition == (tailposition.x - 1, tailposition.y))
-    {
-        return true;
-    }
-    //Checks if head is to the right of tail
-    if (headposition == (tailposition.x, tailposition.y + 1))
-    {
-        return true;
-    }
-    //Checks if head is to the left of tail
-    if (headposition == (tailposition.x, tailposition.y - 1))
-    {
-        return true;
-    }
-    return false;
-
-}
-
-static bool Adjacent((int x, int y) headposition, (int x, int y) tailposition)
-{
-    //Checks if head is top right of tail
-    if (headposition == (tailposition.x - 1, tailposition.y + 1))
-    {
-        return true;
-    }
-    //Checks if head is top left of tail
-    if (headposition == (tailposition.x - 1, tailposition.y - 1))
-    {
-        return true;
-    }
-    //Checks if head is bottom right of tail
-    if (headposition == (tailposition.x + 1, tailposition.y + 1))
-    {
-        return true;
-    }
-    //Checks if head is bottom left of tail
-    if (headposition == (tailposition.x + 1, tailposition.y - 1))
-    {
-        return true;
-    }
-    return false;
-
-}
-//----- Part 2 -----//
-/* string[] lines = System.IO.File.ReadAllLines("input.txt");
-List<List<string>> playground = new List<List<string>>();
-var previous = new List<int>();
-(int x, int y)[] items = new (int x, int y)[10];
-for (var i = 0; i < 10; i++)
-{
-    items[i] = ((x: 0, y: 0));
-    previous.Add(0);
-}
-var position = new Dictionary<(int, int), int>();
-position.Add((0, 0), 1);
-
-
-var timesMoved = 1;
-foreach (var line in lines)
-{
-    var parts = line.Split(" ");
-    if (parts[0] == "R")
-    {
-
-        for (var i = 0; i < Int32.Parse(parts[1]); i++)
-        {
-            items[0].y++;
-            for (var j = 0; j < items.Count(); j++)
-            {
-                if (j == 9) { continue; }
-                if (NeedToMove(items[j], items[j + 1]))
-                {
-                    Console.WriteLine();
-                    items[j + 1] = items[j];
-                    items[j + 1].y--;
-                }
-            }
-        }
-    }
-    else if (parts[0] == "U")
-    {
-        for (var i = 0; i < Int32.Parse(parts[1]); i++)
-        {
-            items[0].x--;
-            for (var j = 0; j < 1; j++)
-            {
-                if (j == 9) { continue; }
-                if (NeedToMove(items[j], items[j + 1]))
-                {
-                    items[j + 1] = items[j];
-                    items[j + 1].x++;
-                }
-            }
-        }
     }
 }
-foreach (var item in items)
-{
-    Console.WriteLine(item);
-}
-Console.WriteLine(timesMoved); */
-/* if (j == 8)
-                   {
-                       if (position.ContainsKey(items[j + 1]))
-                       {
-
-                           position[items[j + 1]]++;
-                       }
-                       else
-                       {
-                           timesMoved++;
-                           position.Add(items[j + 1], 1);
-                       }
-                   } */
+Console.WriteLine(visitedLocations.Count);

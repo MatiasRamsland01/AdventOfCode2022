@@ -8,16 +8,25 @@ public class Directory : IDirectory
     public Directory? Parent { get; set; }
     public List<Directory> Directories { get; set; } = new List<Directory>();
     public List<int> Files { get; set; } = new List<int>();
-    public int Sum()
+    public long TotalSize
     {
-        var sum = Files.Sum();
-        //This is supposed to go recursively through all children directories and sum their files. But it doesn't work. I don't know why.
-        foreach (var directory in Directories)
+        get
         {
-            sum += directory.Sum();
+            long size = 0;
+            foreach (var file in Files)
+            {
+                size += file;
+            }
+            foreach (var directory in Directories)
+            {
+                size += directory.TotalSize;
+            }
+            return size;
+
         }
-        return sum;
+
     }
+
     public void AddFile(int file)
     {
         Files.Add(file);
