@@ -32,7 +32,9 @@ foreach (var line in lines)
 }
 foreach (var directory in directories)
 {
-    Console.WriteLine(directory.Name + " " + directory.Sum());
+    var total = directory.TotalSize;
+    foreach (var file in directory.Directories)
+    {
+        Console.WriteLine(file.Name + " " + file.TotalSize);
+    }
 }
-
-
