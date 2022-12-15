@@ -1,36 +1,33 @@
 ﻿using System.Text.RegularExpressions;
 Regex coords = new Regex(@"x=(-?\d+), y=(-?\d+)", RegexOptions.Compiled);
 var lines = File.ReadAllLines("input.txt");
-var Y = 10;
+var Y = 2000000;
 var notValidPositions = new List<int>();
 var validPositions = new List<int>();
 foreach (var line in lines)
 {
     var match = coords.Matches(line);
-    (int sx, int sy) = (int.Parse(match[0].Groups[1].Value), int.Parse(match[0].Groups[2].Value));
-    (int bx, int by) = (int.Parse(match[1].Groups[1].Value), int.Parse(match[1].Groups[2].Value));
-    Console.WriteLine($"Start: {sx}, {sy} - Beacon: {bx}, {by}");
-    var distance = Math.Abs(sx - bx) + Math.Abs(sy - by);
-    var offset = distance - Math.Abs(sy - Y);
-    //If offset is smaller it means that offset is smaller than the row difference. This means that all beacons within this row are further away
+    (int signalX, int signalY) = (int.Parse(match[0].Groups[1].Value), int.Parse(match[0].Groups[2].Value));
+    (int beaconX, int beaconY) = (int.Parse(match[1].Groups[1].Value), int.Parse(match[1].Groups[2].Value));
+    var d = Math.Abs(signalX - beaconX) + Math.Abs(signalY - beaconY);
+    var offset = d - Math.Abs(signalY - Y);
     if (offset < 0)
     {
         continue;
     }
-    //Defines the range that no other beacon can be
-    var dx = sx - offset;
-    var dy = sy + offset;
-
-    for (var i = dx; i <= dy; i++)
+    var lx = signalX - offset;
+    var hx = signalX + offset;
+    for (int x = lx; x <= hx; x++)
     {
-        notValidPositions.Add(i);
+        notValidPositions.Add(x);
     }
-    if (by == Y)
+    if (beaconY == Y)
     {
-        validPositions.Add(bx);
+        validPositions.Add(beaconX);
     }
 }
-Console.WriteLine(notValidPositions.Except(validPositions).Count());
+var setdiff = notValidPositions.Except(validPositions);
+Console.WriteLine(setdiff.Count());
 /* foreach (var validPosition in validPositions)
 {
     Console.WriteLine(validPosition);
